@@ -1,0 +1,38 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: pi
+    password: pipass
+  cloud:
+    stream:
+      function.definition: aggregate;testSource;testSink
+      bindings:
+        aggregate-out-0:
+          binder: rabbit
+          destination: transformed
+        testSink-in-0:
+          binder: rabbit
+          destination: transformed
+        aggregate-in-0:
+          binder: rabbit
+          destination: testtock
+        testSource-out-0:
+          binder: rabbit
+          destination: testtock
+    rabbit:
+      bindings:
+        aggregate-out-0:
+          producer:
+            bindingRoutingKey: id
+            exchangeType: direct
+        testSink-in-0:
+          consumer:
+            exchangeType: direct
+        aggregate-in-0:
+          consumer:
+            exchangeType: direct
+        testSource-out-0:
+          producer:
+            bindingRoutingKey: id
+            exchangeType: direct
